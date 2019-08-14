@@ -44,3 +44,10 @@ Goal: To create a classification model to predict Car_Cancellation.
     (>.25 and <.75) Base * Multiplier
     (<.25) Base*2*multiplier
 13. Created a final dataframe with area id and price surge in that area.    
+
+
+Given enough time and resources, I would try:
+
+1. Hyperparameter tuning and increasing the accuracy.
+2. Getting more columns from the date column.
+3. To consider to_area_id and somehow calculate the cars that will be approaching to that particular area.
