@@ -1,0 +1,46 @@
+Data Science Task
+
+1st Approach:
+
+1. It is mentioned in the data description that Car_Cancelled is due to the unavailability of the drivers. I misunderstood it for the cars canceled by the user. So at first, removed all rows where Car_Cancelled == 1.
+Then grouped the data by from_area_id, to get the no-of-trips originating from an area. 
+
+2. To get the real-time data, took current DateTime, extracted hours from that, and checked if the booking date and time is around the current hour.
+
+3. Removed all data that are from other times.
+
+4. Then divided the data into four quartiles on the bases of no of trips originating from that area. Each quartile was assigned a multiplier. 
+
+5. The base price was 100. If new bookings arise from some area in any quartile then price will be base price * multiplier of that quartile.
+
+Out of curiosity, I googled 'Uber price surging algorithm'. There I found that It also depended on the availability of drivers. Then it struck me that Car_Cancelled must be due to unavailability. I checked the description. It was so.
+
+2nd Approach:
+
+Price Surging, some points:
+
+1. Price surge will depend on the availability of drivers in the area and the no of trips requested.
+2. Different slabs, based on the availability of drivers and no of trips need to be created for price surging.
+3. (No of canceled trips/total no of trips ) will give the probability of a request being canceled by the user.
+
+Goal: To create a classification model to predict Car_Cancellation.
+
+1. Grouped by the data based on from_area_id.
+2. Calculated Probability(1 - (No of canceled trips/total no of trips)) of getting a cab in that area.
+3. Plotted area vs probability to get see the chances of getting a cab in different areas.
+4. Feature Engineering and Preprocessing:
+    a. Dropped columns with less non-null values.
+    b. Replaced the few null values in some columns with mode.
+    c. Extracted day of the week, isWeekend and time slab of the day from booking created column.
+5. Split the data using sklearn train_test_split
+6. Used Logistic Regression for classification, got 92% accuracy in predicting Car_Cancelled(0,1) value.
+7. Used XgBoost got 93.2.
+8. Using Xgboost predicted (0,1) of car canceled column.
+9. Created a Car_Cancelled column in X_test.
+10. Again calculated the probability of getting a cab per area.
+11. This time surged the prices based on the probability.
+12. If probability:
+    (>.75) No surge
+    (>.25 and <.75) Base * Multiplier
+    (<.25) Base*2*multiplier
+13. Created a final dataframe with area id and price surge in that area.    
